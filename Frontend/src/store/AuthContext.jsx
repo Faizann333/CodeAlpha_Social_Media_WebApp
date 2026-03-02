@@ -25,7 +25,8 @@ export const AuthProvider = ({ children }) => {
   const handleSignup = async (signupData) => {
     try {
       const res = await axios.post(`${API_BASE_URL}/auth/sign-up`, signupData, { withCredentials: true });
-      toast.success("Signup successful! Please login.");
+      toast.success("Signup successful!");
+      setUser(res.data.user);
       return true;
     } catch (error) {
       toast.error("Signup failed: " + error.response.data.message);

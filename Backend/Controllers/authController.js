@@ -6,7 +6,7 @@ dotenv.config();
 
 exports.postSignUpController = async (req, res) => {
     try {
-        const { name,  email, password , confirmPassword  } = req.body;
+        const { name,  email, password , confirmPassword , userName } = req.body;
         if (password !== confirmPassword) {
             return res.status(400).json({ message: "Passwords do not match" });
         }
@@ -14,7 +14,9 @@ exports.postSignUpController = async (req, res) => {
         if (
             !name ||
             !email ||
-            !password 
+            !password ||
+            !confirmPassword||
+            !userName
         ) {
             return res.status(400).json({
                 success: false,
@@ -30,11 +32,19 @@ exports.postSignUpController = async (req, res) => {
             });
         }
 
+        const existingUserExist = await User.findOne({ userName });
+        if (existingUserExist) {
+            return res.status(400).json({
+                success: false,
+                message: "User with this username already exists",
+            });
+        }
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
             name,
             email,
+            userName,
             password: hashedPassword,
             role : 'user'
         });
@@ -42,7 +52,7 @@ exports.postSignUpController = async (req, res) => {
         await newUser.save();
 
         const token = jwt.sign(
-            { userId: newUser._id, email: newUser.email },
+            { userId: newUser._id, email: newUser.email , userName: newUser.userName, role: newUser.role},
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
@@ -61,7 +71,9 @@ exports.postSignUpController = async (req, res) => {
                 userId: newUser._id,
                 name: newUser.name,
                 email: newUser.email,
+                userName: newUser.userName,
                 role : newUser.role,
+
             },
         });
     } catch (error) {
@@ -98,7 +110,7 @@ exports.postLoginController = async (req, res) => {
             });
         }  
         const token = jwt.sign(
-            { userId: user._id, email: user.email },
+            { userId: user._id, email: user.email , userName: user.userName, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
@@ -116,6 +128,7 @@ exports.postLoginController = async (req, res) => {
                 userId: user._id,
                 name: user.name,
                 email: user.email,
+                userName: user.userName,
                 role : user.role,
             },
         });

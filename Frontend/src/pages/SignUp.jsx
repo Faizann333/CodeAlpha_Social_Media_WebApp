@@ -12,6 +12,7 @@ const SignUp = () => {
   const {handleSignup} = useContext(AuthContext);
   const navigate = useNavigate();
       const [name, setName] = useState('');
+      const [userName, setUserName] = useState('');
       const [email, setEmail] = useState('');
       const [password, setPassword] = useState('');
       const [confirmPassword, setConfirmPassword] = useState('');
@@ -21,6 +22,7 @@ const SignUp = () => {
 
     const signupData = {
       name,
+      userName,
       email,
       password,
       confirmPassword
@@ -28,11 +30,12 @@ const SignUp = () => {
     const res = await handleSignup(signupData);
     if(res){
         setName('');
+        setUserName('');
         setEmail('');
         setPassword('');
         setConfirmPassword('');
-
-        navigate('/login');
+        
+        navigate('/');
     }
 
   }
@@ -43,6 +46,7 @@ const SignUp = () => {
          <h1 className='text-3xl font-bold text-center mt-10'>Create New Account</h1>
             <form className='w-[400px] mx-auto mt-10 flex flex-col gap-5' onSubmit={onSignup}>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' className='border px-3 py-2 rounded'/>
+                <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} placeholder='Username' className='border px-3 py-2 rounded'/>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email' className='border px-3 py-2 rounded'/>
                 <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' className='border px-3 py-2 rounded'/>
                 <input type="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder='Confirm Password' className='border px-3 py-2 rounded'/> 
