@@ -19,21 +19,19 @@ const Login = () => {
    if(res){
     setEmail('');
     setPassword('');
-    navigate('/');
+    navigate('/posts');
    }
-
   }
-  
   
 
   return (
-    <div className='min-h-[80vh]'>
+    <div className='min-h-[80vh] bg-gray-900 text-gray-100 py-10'>
       
          <h1 className='text-3xl font-bold text-center mt-15'>Login to your Account</h1>
             <form className='w-[400px] mx-auto mt-10 flex flex-col gap-5' onSubmit={onLogin}>
                
-                <input type="email" placeholder='Email' className='border px-3 py-2 rounded' value={email} onChange={(e) => setEmail(e.target.value)}/>
-                <input type="password" placeholder='Password' className='border px-3 py-2 rounded' value={password} onChange={(e) => setPassword(e.target.value)}/> 
+                <input type="email" placeholder='Email' className='border px-3 py-2 rounded-lg' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                <input type="password" placeholder='Password' className='border px-3 py-2 rounded-lg  ' value={password} onChange={(e) => setPassword(e.target.value)}/> 
                 <p>Don't have an account? <Link to="/sign-up" className="text-purple-600 hover:underline">Sign Up</Link></p>   
                 <Button name= "Login" className="bg-purple-600 h-[50px] w-[120px] hover:bg-purple-700"/>
             </form>

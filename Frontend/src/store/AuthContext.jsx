@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useState, useEffect, createContext } from "react";
 import { toast } from "react-toastify";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -15,8 +17,10 @@ export const AuthProvider = ({ children }) => {
       if (response.data.success) {
         setUser(response.data.user);
       }
+      // console.log("User data from get-me:", response.data.user);
     } catch (error) {
-      setUser(false);
+      console.error("Error checking auth:", error);
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -59,6 +63,7 @@ export const AuthProvider = ({ children }) => {
       if (res.data.success) {
         setUser(null);
         toast.success("Logged out successfully!");
+       
       }
     } catch (error) {
       toast.error("Logout error:", error);
